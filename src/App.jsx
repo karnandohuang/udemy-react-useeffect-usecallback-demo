@@ -10,7 +10,10 @@ import {sortPlacesByDistance} from "./loc.js";
 function App() {
   const modal = useRef();
   const selectedPlace = useRef();
-  const [pickedPlaces, setPickedPlaces] = useState([]);
+
+  const storedIds = JSON.parse(localStorage.getItem('selectedPlaces') || '[]');
+  const savedPlaces = AVAILABLE_PLACES.filter(place => storedIds.find(id => id === place.id));
+  const [pickedPlaces, setPickedPlaces] = useState(savedPlaces);
     const [sortedPlaces, setSortedPlaces] = useState([])
 
     useEffect(() => {
@@ -37,6 +40,11 @@ function App() {
       const place = AVAILABLE_PLACES.find((place) => place.id === id);
       return [place, ...prevPickedPlaces];
     });
+
+    const storedIds = JSON.parse(localStorage.getItem('selectedPlaces') || '[]');
+    if (storedIds.indexOf(id) === -1) {
+        localStorage.setItem('selectedPlaces', JSON.stringify([id, ...storedIds]));
+    }
   }
 
   function handleRemovePlace() {
@@ -44,6 +52,9 @@ function App() {
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
     );
     modal.current.close();
+
+    const storedIds = JSON.parse(localStorage.getItem('selectedPlaces') || '[]');
+    localStorage.setItem('selectedPlaces', JSON.stringify(storedIds.filter(id => id !== selectedPlace.current)));
   }
 
   return (
