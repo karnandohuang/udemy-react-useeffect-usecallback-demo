@@ -1,6 +1,7 @@
 import {useEffect} from "react";
 import ProgressBar from "./ProgressBar.jsx";
 
+const TIMER = 3000
 
 export default function DeleteConfirmation({ onConfirm, onCancel }) {
 
@@ -28,7 +29,7 @@ export default function DeleteConfirmation({ onConfirm, onCancel }) {
           Yes
         </button>
       </div>
-        <ProgressBar />
+        <ProgressBar timer={TIMER} />
     </div>
   );
 }
